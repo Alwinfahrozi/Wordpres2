@@ -18,6 +18,7 @@ jobs:
       WP_DB_USER: root
       WP_DB_PASS: "Af@050602"
       WP_DB_HOST: 127.0.0.1  # Gunakan IP ini untuk koneksi TCP
+      WP_DB_PORT: 3307        # Gunakan port 3307 sebagai contoh
 
     steps:
       - name: Check out code
@@ -40,6 +41,7 @@ jobs:
           mysql version: '5.7'
           root password: "Af@050602"
           databases: wordpress_test  # Membuat database
+          ports: "3307:3306"         # Memetakan port 3306 di Docker ke 3307 di host
 
       - name: Set up WordPress testing environment
         run: |

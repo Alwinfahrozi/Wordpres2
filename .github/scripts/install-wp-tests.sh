@@ -5,12 +5,14 @@ DB_NAME=${1:-wordpress_test}
 DB_USER=${2:-root}
 DB_PASS=${3:-Af@050602}
 DB_HOST=${4:-127.0.0.1}  # Ubah localhost ke 127.0.0.1
-WP_VERSION=${5:-latest}
+DB_PORT=${5:-3307}       # Gunakan port 3307
+WP_VERSION=${6:-latest}
 
 echo "Database Name: $DB_NAME"
 echo "Database User: $DB_USER"
 echo "Database Password: $DB_PASS"
 echo "Database Host: $DB_HOST"
+echo "Database Port: $DB_PORT"
 echo "WordPress Version: $WP_VERSION"
 
 # Directory for test library
@@ -50,12 +52,13 @@ if [ ! -f "$WP_TESTS_DIR/wp-tests-config.php" ]; then
   sed -i "s/yourusernamehere/$DB_USER/" "$WP_TESTS_DIR/wp-tests-config.php"
   sed -i "s/yourpasswordhere/$DB_PASS/" "$WP_TESTS_DIR/wp-tests-config.php"
   sed -i "s|localhost|${DB_HOST}|" "$WP_TESTS_DIR/wp-tests-config.php"
+  sed -i "s|3306|${DB_PORT}|" "$WP_TESTS_DIR/wp-tests-config.php"  # Sesuaikan dengan port
 fi
 
 # Install the test database
 echo "Creating test database..."
 for attempt in {1..5}; do
-  if mysql -u"$DB_USER" -p"$DB_PASS" -h"$DB_HOST" -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"; then
+  if mysql -u"$DB_USER" -p"$DB_PASS" -h"$DB_HOST" -P"$DB_PORT" -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"; then
     echo "Test database created successfully."
     break
   else
