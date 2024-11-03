@@ -12,8 +12,8 @@ WP_TESTS_DIR=${WP_TESTS_DIR:-/tmp/wordpress-tests-lib}
 WP_CORE_DIR=${WP_CORE_DIR:-/tmp/wordpress}
 
 # Check for required dependencies
-command -v curl >/dev/null 2>&1 || { echo >&2 "curl is required but not installed. Aborting."; exit 1; }
-command -v svn >/dev/null 2>&1 || { echo >&2 "svn is required but not installed. Aborting."; exit 1; }
+command -v curl >/dev/null 2>&1 || { echo >&2 "Error: curl is required but not installed. Aborting."; exit 1; }
+command -v svn >/dev/null 2>&1 || { echo >&2 "Error: svn is required but not installed. Aborting."; exit 1; }
 
 # Download WordPress if not already downloaded
 if [ ! -d "$WP_CORE_DIR" ]; then
@@ -38,6 +38,7 @@ fi
 
 # Create a wp-tests-config.php file with DB credentials
 if [ ! -f "$WP_TESTS_DIR/wp-tests-config.php" ]; then
+  echo "Setting up wp-tests-config.php with database credentials..."
   cp $WP_TESTS_DIR/wp-tests-config-sample.php $WP_TESTS_DIR/wp-tests-config.php
   sed -i "s/youremptytestdbnamehere/$DB_NAME/" $WP_TESTS_DIR/wp-tests-config.php
   sed -i "s/yourusernamehere/$DB_USER/" $WP_TESTS_DIR/wp-tests-config.php
@@ -49,6 +50,7 @@ fi
 echo "Creating test database..."
 mysql -u"$DB_USER" -p"$DB_PASS" -h"$DB_HOST" -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" || {
   echo "Error: Unable to create test database. Check your DB credentials and try again.";
+  echo "DB_NAME: $DB_NAME, DB_USER: $DB_USER, DB_PASS: $DB_PASS, DB_HOST: $DB_HOST"
   exit 1;
 }
 

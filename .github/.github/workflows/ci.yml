@@ -17,7 +17,7 @@ jobs:
       WP_DB_NAME: wordpress_test
       WP_DB_USER: root
       WP_DB_PASS: ""
-      WP_DB_HOST: 127.0.0.1
+      WP_DB_HOST: localhost  # Gunakan 'localhost' sesuai instruksi
 
     steps:
       - name: Check out code
@@ -36,11 +36,12 @@ jobs:
         with:
           mysql version: '5.7'
           root password: ""
-          
+
+      # Tambahkan delay setelah menyiapkan MySQL
       - name: Wait for MySQL to initialize
         run: |
           echo "Waiting for MySQL to initialize..."
-          sleep 15  # Menunggu beberapa detik untuk memastikan MySQL sudah siap
+          sleep 20  # Menunggu beberapa detik untuk memastikan MySQL sudah siap, bisa disesuaikan jika perlu
 
       - name: Set up WordPress testing environment
         run: |
