@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Arguments
-DB_NAME=$1
-DB_USER=$2
-DB_PASS=$3
+DB_NAME=wordpress_test
+DB_USER=root
+DB_PASS=Af@050602
 DB_HOST=${4-localhost}
 WP_VERSION=${5-latest}
 
