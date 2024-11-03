@@ -32,16 +32,14 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist
 
-      - name: Start MySQL Service
-        run: sudo service mysql start  # Memastikan MySQL service berjalan
-
       - name: Set up MySQL
         uses: mirromutth/mysql-action@v1
         with:
           mysql version: '5.7'
-          root password: "Af@050602"
-          databases: wordpress_test  # Membuat database
-          ports: "3307:3306"         # Memetakan port 3306 di Docker ke 3307 di host
+          mysql database: "$WP_DB_NAME"  # Mengatur nama database
+          mysql user: "$WP_DB_USER"       # Mengatur nama pengguna MySQL
+          mysql password: "$WP_DB_PASS"   # Mengatur password root MySQL
+          ports: "3307:3306"              # Memetakan port 3306 di Docker ke 3307 di host
 
       - name: Set up WordPress testing environment
         run: |
