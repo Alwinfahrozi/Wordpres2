@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 
-# Arguments
-DB_NAME=wordpress_test
-DB_USER=root
-DB_PASS=Af@050602
-DB_HOST=${4-localhost}
-WP_VERSION=${5-latest}
+# Arguments (gunakan parameter atau default)
+DB_NAME=${1:-wordpress_test}
+DB_USER=${2:-root}
+DB_PASS=${3:-Af@050602}
+DB_HOST=${4:-localhost}
+WP_VERSION=${5:-latest}
+
+echo "Database Name: $DB_NAME"
+echo "Database User: $DB_USER"
+echo "Database Password: $DB_PASS"
+echo "Database Host: $DB_HOST"
+echo "WordPress Version: $WP_VERSION"
 
 # Directory for test library
 WP_TESTS_DIR=${WP_TESTS_DIR:-/tmp/wordpress-tests-lib}
