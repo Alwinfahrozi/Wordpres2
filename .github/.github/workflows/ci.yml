@@ -12,36 +12,35 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    steps:
-      # Step 1: Checkout kode dari repositori
-      - name: Checkout code
-        uses: actions/checkout@v2
+    env:
+      WP_VERSION: latest
+      WP_DB_NAME: wordpress_test
+      WP_DB_USER: root
+      WP_DB_PASS: ""
+      WP_DB_HOST: 127.0.0.1
 
-      # Step 2: Setup PHP
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'  # Versi PHP yang akan digunakan
-          extensions: mbstring, mysqli, dom, json
-          ini-values: post_max_size=256M, upload_max_filesize=256M
-          coverage: none
+          php-version: '8.0'
 
-      # Step 3: Install Composer dependencies
       - name: Install Composer dependencies
-        run: composer install --no-progress --prefer-dist
+        run: composer install --no-interaction --prefer-dist
 
-      # Step 4: Setup WordPress testing environment
+      - name: Set up MySQL
+        uses: mirromutth/mysql-action@v1
+        with:
+          mysql version: '5.7'
+          root password: ""
+
       - name: Set up WordPress testing environment
-        env:
-          WP_VERSION: latest
-          WP_TESTS_DIR: /tmp/wordpress-tests-lib
-          WP_CORE_DIR: /tmp/wordpress
         run: |
-          bash ./.github/scripts/install-wp-tests.sh wordpress_db root '' localhost latest
+          chmod +x .github/scripts/install-wp-tests.sh
+          ./.github/scripts/install-wp-tests.sh $WP_DB_NAME $WP_DB_USER "$WP_DB_PASS" $WP_DB_HOST $WP_VERSION
 
-      # Step 5: Run PHPUnit tests
       - name: Run PHPUnit tests
-        env:
-          WP_CORE_DIR: /tmp/wordpress
-        run: |
-          vendor/bin/phpunit
+        run: vendor/bin/phpunit
