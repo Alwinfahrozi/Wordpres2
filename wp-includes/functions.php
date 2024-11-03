@@ -9083,3 +9083,38 @@ function wp_is_heic_image_mime_type( $mime_type ) {
 
 	return in_array( $mime_type, $heic_mime_types, true );
 }
+// Fungsi untuk shortcode pesan selamat datang
+function welcome_message_shortcode($atts) {
+    $atts = shortcode_atts(array(
+        'name' => 'pengunjung',
+    ), $atts);
+
+    return "Selamat datang, " . esc_html($atts['name']) . "!";
+}
+
+// Mendaftarkan shortcode [welcome_message name="nama"]
+add_shortcode('welcome_message', 'welcome_message_shortcode');
+// Menambahkan opsi nama perusahaan pada pengaktifan tema
+function set_company_name_option() {
+    add_option('company_name', 'Perusahaan Saya');
+}
+add_action('after_switch_theme', 'set_company_name_option');
+
+// Mengambil dan menampilkan nama perusahaan dari opsi
+function get_company_name() {
+    return get_option('company_name', 'Perusahaan Default');
+}
+
+// Menampilkan nama perusahaan di footer
+function display_company_name_footer() {
+    echo '<p>&copy; ' . esc_html(get_company_name()) . '</p>';
+}
+add_action('wp_footer', 'display_company_name_footer');
+// Fungsi untuk menghitung jumlah postingan yang dipublikasikan
+function count_total_posts() {
+    $count_posts = wp_count_posts();
+    return $count_posts->publish;
+}
+
+// Mendaftarkan shortcode [total_posts] untuk menggunakan fungsi ini
+add_shortcode('total_posts', 'count_total_posts');
