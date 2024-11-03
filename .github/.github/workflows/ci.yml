@@ -1,0 +1,51 @@
+name: CI Pipeline for WordPress
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    env:
+      WP_VERSION: latest
+      WP_DB_NAME: wordpress_test
+      WP_DB_USER: root
+      WP_DB_PASS: ""
+      WP_DB_HOST: 127.0.0.1
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Set up MySQL
+        uses: mirromutth/mysql-action@v1
+        with:
+          mysql version: '5.7'
+          root password: ""
+          
+      - name: Wait for MySQL to initialize
+        run: |
+          echo "Waiting for MySQL to initialize..."
+          sleep 15  # Menunggu beberapa detik untuk memastikan MySQL sudah siap
+
+      - name: Set up WordPress testing environment
+        run: |
+          chmod +x .github/scripts/install-wp-tests.sh
+          ./.github/scripts/install-wp-tests.sh $WP_DB_NAME $WP_DB_USER "$WP_DB_PASS" $WP_DB_HOST $WP_VERSION
+
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit
