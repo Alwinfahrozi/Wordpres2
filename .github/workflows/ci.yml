@@ -17,7 +17,7 @@ jobs:
       WP_DB_NAME: wordpress_test
       WP_DB_USER: root
       WP_DB_PASS: "Af@050602"
-      WP_DB_HOST: localhost
+      WP_DB_HOST: 127.0.0.1  # Gunakan IP ini untuk koneksi TCP
 
     steps:
       - name: Check out code
@@ -31,12 +31,15 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist
 
+      - name: Start MySQL Service
+        run: sudo service mysql start  # Memastikan MySQL service berjalan
+
       - name: Set up MySQL
         uses: mirromutth/mysql-action@v1
         with:
           mysql version: '5.7'
           root password: "Af@050602"
-          databases: wordpress_test  # Tambahkan database yang akan dibuat otomatis
+          databases: wordpress_test  # Membuat database
 
       - name: Set up WordPress testing environment
         run: |

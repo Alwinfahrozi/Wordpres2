@@ -4,7 +4,7 @@
 DB_NAME=${1:-wordpress_test}
 DB_USER=${2:-root}
 DB_PASS=${3:-Af@050602}
-DB_HOST=${4:-localhost}
+DB_HOST=${4:-127.0.0.1}  # Ubah localhost ke 127.0.0.1
 WP_VERSION=${5:-latest}
 
 echo "Database Name: $DB_NAME"
