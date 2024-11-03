@@ -33,4 +33,23 @@ fi
 # Ensure wp-tests-config-sample.php exists
 if [ ! -f "$WP_TESTS_DIR/wp-tests-config-sample.php" ]; then
   echo "Downloading wp-tests-config-sample.php..."
- 
+  curl -o $WP_TESTS_DIR/wp-tests-config-sample.php https://raw.githubusercontent.com/WordPress/wordpress-develop/master/tests/phpunit/includes/wp-tests-config-sample.php
+fi
+
+# Create a wp-tests-config.php file with DB credentials
+if [ ! -f "$WP_TESTS_DIR/wp-tests-config.php" ]; then
+  cp $WP_TESTS_DIR/wp-tests-config-sample.php $WP_TESTS_DIR/wp-tests-config.php
+  sed -i "s/youremptytestdbnamehere/$DB_NAME/" $WP_TESTS_DIR/wp-tests-config.php
+  sed -i "s/yourusernamehere/$DB_USER/" $WP_TESTS_DIR/wp-tests-config.php
+  sed -i "s/yourpasswordhere/$DB_PASS/" $WP_TESTS_DIR/wp-tests-config.php
+  sed -i "s|localhost|${DB_HOST}|" $WP_TESTS_DIR/wp-tests-config.php
+fi
+
+# Install the test database
+echo "Creating test database..."
+mysql -u"$DB_USER" -p"$DB_PASS" -h"$DB_HOST" -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" || {
+  echo "Error: Unable to create test database. Check your DB credentials and try again.";
+  exit 1;
+}
+
+echo "WordPress testing environment is set up."
