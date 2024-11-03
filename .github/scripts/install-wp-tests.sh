@@ -49,5 +49,18 @@ fi
 # Install the test database
 echo "Creating test database..."
 for attempt in {1..5}; do
-  mysql -u"$DB_USER" -p"$DB_PASS" -h"$DB_HOST" -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" && break || {
-    echo "Attempt $attempt: Unable to create test database. Retrying in 5
+  if mysql -u"$DB_USER" -p"$DB_PASS" -h"$DB_HOST" -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"; then
+    echo "Test database created successfully."
+    break
+  else
+    echo "Attempt $attempt: Unable to create test database. Retrying in 5 seconds..."
+    sleep 5
+  fi
+done
+
+if [ "$attempt" -eq 5 ]; then
+  echo "Error: Could not create test database after multiple attempts."
+  exit 1
+fi
+
+echo "Setup complete. WordPress testing environment is ready."
