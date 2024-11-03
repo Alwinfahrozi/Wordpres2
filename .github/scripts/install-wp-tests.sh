@@ -4,8 +4,8 @@
 DB_NAME=${1:-wordpress_test}
 DB_USER=${2:-root}
 DB_PASS=${3:-Af@050602}
-DB_HOST=${4:-127.0.0.1}  # Ubah localhost ke 127.0.0.1
-DB_PORT=${5:-3307}       # Gunakan port 3307
+DB_HOST=${4:-127.0.0.1}  # Gunakan IP ini untuk koneksi TCP
+DB_PORT=${5:-3307}       # Tentukan port MySQL jika diperlukan
 WP_VERSION=${6:-latest}
 
 echo "Database Name: $DB_NAME"
@@ -52,7 +52,6 @@ if [ ! -f "$WP_TESTS_DIR/wp-tests-config.php" ]; then
   sed -i "s/yourusernamehere/$DB_USER/" "$WP_TESTS_DIR/wp-tests-config.php"
   sed -i "s/yourpasswordhere/$DB_PASS/" "$WP_TESTS_DIR/wp-tests-config.php"
   sed -i "s|localhost|${DB_HOST}|" "$WP_TESTS_DIR/wp-tests-config.php"
-  sed -i "s|3306|${DB_PORT}|" "$WP_TESTS_DIR/wp-tests-config.php"  # Sesuaikan dengan port
 fi
 
 # Install the test database

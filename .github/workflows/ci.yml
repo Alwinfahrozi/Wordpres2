@@ -17,8 +17,8 @@ jobs:
       WP_DB_NAME: wordpress_test
       WP_DB_USER: root
       WP_DB_PASS: "Af@050602"
-      WP_DB_HOST: 127.0.0.1  # Gunakan IP ini untuk koneksi TCP
-      WP_DB_PORT: 3307        # Gunakan port 3307 sebagai contoh
+      WP_DB_HOST: 127.0.0.1
+      WP_DB_PORT: 3307  # Gunakan port berbeda untuk MySQL
 
     steps:
       - name: Check out code
@@ -36,10 +36,10 @@ jobs:
         uses: mirromutth/mysql-action@v1
         with:
           mysql version: '5.7'
-          mysql database: "$WP_DB_NAME"  # Mengatur nama database
-          mysql user: "$WP_DB_USER"       # Mengatur nama pengguna MySQL
-          mysql password: "$WP_DB_PASS"   # Mengatur password root MySQL
-          ports: "3307:3306"              # Memetakan port 3306 di Docker ke 3307 di host
+          mysql database: "$WP_DB_NAME"
+          mysql user: "$WP_DB_USER"
+          mysql password: "$WP_DB_PASS"
+          ports: "3307:3306"  # Map container port 3306 to host port 3307
 
       - name: Set up WordPress testing environment
         run: |
