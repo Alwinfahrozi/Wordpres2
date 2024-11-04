@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      WP_VERSION: "5.7"  # Tentukan versi WordPress secara eksplisit, misalnya "5.7" atau "5.8"
+      WP_VERSION: "5.7"
       WP_DB_NAME: wordpress_test
       WP_DB_USER: root
       WP_DB_PASS: "Af@050602"
-      WP_DB_HOST: 127.0.0.1
-      WP_DB_PORT: 3307  # Gunakan port khusus
+      WP_DB_HOST: 127.0.0.1  # Tetapkan ke IP ini untuk koneksi TCP
+      WP_DB_PORT: 3306       # Kembali ke port default MySQL
 
     steps:
       - name: Check out code
@@ -39,7 +39,7 @@ jobs:
           mysql database: "$WP_DB_NAME"
           mysql user: "$WP_DB_USER"
           mysql password: "$WP_DB_PASS"
-          ports: "3307:3306"  # Mapping port container ke host
+          ports: "3306:3306"  # Tetapkan ke port 3306 di host
 
       - name: Set up WordPress testing environment
         run: |
