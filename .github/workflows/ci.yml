@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      WP_VERSION: "5.7"
+      WP_VERSION: "5.7"  # Tentukan versi WordPress
       WP_DB_NAME: wordpress_test
       WP_DB_USER: root
       WP_DB_PASS: "Af@050602"
       WP_DB_HOST: 127.0.0.1
-      WP_DB_PORT: 3306  # Kembali ke port default MySQL
+      WP_DB_PORT: 3306  # Port MySQL default
 
     steps:
       - name: Check out code
@@ -36,15 +36,14 @@ jobs:
         uses: mirromutth/mysql-action@v1
         with:
           mysql version: '5.7'
-          mysql database: "$WP_DB_NAME"
-          mysql user: "$WP_DB_USER"
-          mysql password: "$WP_DB_PASS"
-          ports: "3306:3306"  # Tetapkan ke port 3306 di host
+          root password: "${{ env.WP_DB_PASS }}"
+          database: "${{ env.WP_DB_NAME }}"
+          ports: "3306:3306"  # Menggunakan port MySQL default
 
       - name: Set up WordPress testing environment
         run: |
           chmod +x .github/scripts/install-wp-tests.sh
-          ./.github/scripts/install-wp-tests.sh "$WP_DB_NAME" "$WP_DB_USER" "$WP_DB_PASS" "$WP_DB_HOST" "$WP_VERSION"
+          ./.github/scripts/install-wp-tests.sh "${{ env.WP_DB_NAME }}" "${{ env.WP_DB_USER }}" "${{ env.WP_DB_PASS }}" "${{ env.WP_DB_HOST }}" "${{ env.WP_DB_PORT }}" "${{ env.WP_VERSION }}"
 
       - name: Run PHPUnit tests
         run: vendor/bin/phpunit
