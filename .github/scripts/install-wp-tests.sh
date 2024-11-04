@@ -4,8 +4,14 @@
 DB_NAME=${1:-wordpress_test}
 DB_USER=${2:-root}
 DB_PASS=${3:-Af@050602}
+<<<<<<< HEAD
 DB_HOST=${4:-127.0.0.1}  # Pastikan untuk menerima host dan port, misalnya: 127.0.0.1:3307
 WP_VERSION=${5:-latest}
+=======
+DB_HOST=${4:-127.0.0.1}  # Pastikan menggunakan IP ini
+DB_PORT=${5:-3306}       # Port default MySQL
+WP_VERSION=${6:-5.7}
+>>>>>>> 78aaf3c10c8f51e2c70db7134054268c3cf87e28
 
 echo "Database Name: $DB_NAME"
 echo "Database User: $DB_USER"

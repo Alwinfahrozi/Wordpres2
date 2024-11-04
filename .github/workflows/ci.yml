@@ -13,12 +13,21 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+<<<<<<< HEAD
       WP_VERSION: "5.7"  # Versi WordPress
       WP_DB_NAME: wordpress_test
       WP_DB_USER: root
       WP_DB_PASS: "Af@050602"
       WP_DB_HOST: 127.0.0.1
       WP_DB_PORT: 3307  # Port khusus
+=======
+      WP_VERSION: "5.7"
+      WP_DB_NAME: wordpress_test
+      WP_DB_USER: root
+      WP_DB_PASS: "Af@050602"
+      WP_DB_HOST: 127.0.0.1  # Tetapkan ke IP ini untuk koneksi TCP
+      WP_DB_PORT: 3306       # Kembali ke port default MySQL
+>>>>>>> 78aaf3c10c8f51e2c70db7134054268c3cf87e28
 
     steps:
       - name: Check out code
@@ -32,10 +41,21 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist
 
+<<<<<<< HEAD
       - name: Start MySQL Service on Custom Port
         run: |
           docker run --name mysql-container -e MYSQL_ROOT_PASSWORD="$WP_DB_PASS" -e MYSQL_DATABASE="$WP_DB_NAME" -p 3307:3306 -d mysql:5.7
           sleep 15  # Waktu tunggu agar MySQL siap
+=======
+      - name: Set up MySQL
+        uses: mirromutth/mysql-action@v1
+        with:
+          mysql version: '5.7'
+          mysql database: "$WP_DB_NAME"
+          mysql user: "$WP_DB_USER"
+          mysql password: "$WP_DB_PASS"
+          ports: "3306:3306"  # Tetapkan ke port 3306 di host
+>>>>>>> 78aaf3c10c8f51e2c70db7134054268c3cf87e28
 
       - name: Set up WordPress testing environment
         run: |
